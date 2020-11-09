@@ -7,13 +7,30 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  ARTIFACT_NAME: DevelopmentMomentum
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+  - stage: Build
+    displayName: Build
+    jobs:
+      - job: Transform
+        displayName: Transform input
+  - stage: Release
+    displayName: Rlease
+    dependsOn: Build
+    jobs:
+      - deployment: DeployToStorage
+        displayName: Deploy to AZ storage
+        
+
+#steps:
+#- script: echo Hello, world!
+#  displayName: 'Run a one-line script'
+
+#- script: |
+#    echo Add other tasks to build, test, and deploy your project.
+#    echo See https://aka.ms/yaml
+#  displayName: 'Run a multi-line script'
